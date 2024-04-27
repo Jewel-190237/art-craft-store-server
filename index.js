@@ -58,6 +58,13 @@ async function run() {
       res.send(result)
     })
 
+    app.get(`/update/:id`, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await artCollection.findOne(query)
+      res.send(result)
+    })
+
     app.get('/myCurt/:id', async (req, res) => {
       const id = req.params.id;
       const result = await artCollection.find({ email: id }).toArray();
@@ -96,7 +103,7 @@ async function run() {
         }
       }
 
-      const result = await coffeeCollection.updateOne(filter, art, options)
+      const result = await artCollection.updateOne(filter, art, options)
       console.log(result)
       res.send(result)
     })
