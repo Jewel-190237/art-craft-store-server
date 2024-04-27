@@ -54,8 +54,15 @@ async function run() {
     app.get(`/singleArts/:id`, async (req, res) => {
       const id = req.params.id;
       const query = {_id : new ObjectId(id)}
-      const filter = await artCollection.findOne(query)
-      res.send(filter)
+      const result = await artCollection.findOne(query)
+      res.send(result)
+    })
+
+    app.get('/myCurt/:id', async(req, res) => {
+      const id = req.params.id;
+      const result = await artCollection.find({email : id}).toArray();
+
+      res.send(result)
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
