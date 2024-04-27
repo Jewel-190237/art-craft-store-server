@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
@@ -41,7 +41,22 @@ async function run() {
 
       const result = await artCollection.insertOne(newArt)
       res.send(result)
-  })
+    })
+
+
+    app.get('/arts', async (req, res) => {
+      const cursor = artCollection.find();
+      const result = await cursor.toArray()
+
+      res.send(result)
+    })
+
+    app.get(`/singleArts/:id`, async (req, res) => {
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const filter = await artCollection.findOne(query)
+      res.send(filter)
+    })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
@@ -53,10 +68,10 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Art and Craft Store running');
+  res.send('Art and Craft Store running');
 })
 
 
 app.listen(port, (req, res) => {
-    console.log(`Art and Craft Store running on ${port}`)
+  console.log(`Art and Craft Store running on ${port}`)
 })
