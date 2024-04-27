@@ -53,15 +53,51 @@ async function run() {
 
     app.get(`/singleArts/:id`, async (req, res) => {
       const id = req.params.id;
-      const query = {_id : new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await artCollection.findOne(query)
       res.send(result)
     })
 
-    app.get('/myCurt/:id', async(req, res) => {
+    app.get('/myCurt/:id', async (req, res) => {
       const id = req.params.id;
-      const result = await artCollection.find({email : id}).toArray();
+      const result = await artCollection.find({ email: id }).toArray();
 
+      res.send(result)
+    })
+
+    app.delete('/delete/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await artCollection.deleteOne(query)
+      res.send(result)
+    })
+
+    app.put('/update_art/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+
+      const options = { upsert: true };
+      const updatedSArts = req.body;
+      const art = {
+        $set: {
+          name: updatedSArts.name,
+          chef: updatedSArts.chef,
+          product_name: updatedSArts.product_name,
+          sub_category_name: updatedSArts.sub_category_name,
+          price: updatedSArts.price,
+          rating: updatedSArts.rating,
+          customization: updatedSArts.customization,
+          processing_time: updatedSArts.processing_time,
+          stock_status: updatedSArts.stock_status,
+          description: updatedSArts.description,
+          user_name: updatedSArts.user_name,
+          user_email: updatedSArts.user_email,
+          photo_url: updatedSArts.photo_url
+        }
+      }
+
+      const result = await coffeeCollection.updateOne(filter, art, options)
+      console.log(result)
       res.send(result)
     })
 
