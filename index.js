@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     // Send a ping to confirm a successful connection
 
     const artCollection = await client.db("art-store").collection('art')
@@ -68,7 +68,6 @@ async function run() {
     app.get('/myCurt/:id', async (req, res) => {
       const id = req.params.id;
       const result = await artCollection.find({ email: id }).toArray();
-
       res.send(result)
     })
 
