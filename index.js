@@ -6,13 +6,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 
-app.use(cors());
+app.use(cors({origin: "*"}));
 app.use(express.json());
 
-//art-and-craft-store
-//hXbpDfiMbAfn77iu
-
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kwtddbl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kwtddbl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -68,6 +64,12 @@ async function run() {
     app.get('/myCurt/:id', async (req, res) => {
       const id = req.params.id;
       const result = await artCollection.find({ email: id }).toArray();
+      res.send(result)
+    })
+
+    app.get('/subCategory/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await artCollection.find({ sub_category_name: id }).toArray();
       res.send(result)
     })
 
